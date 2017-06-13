@@ -151,7 +151,7 @@ function pre_install(){
     echo -e "the cert_info:[$(__green "C=${my_cert_c}, O=${my_cert_o}")]"
     echo ""
     echo "Press any key to start...or Press Ctrl+C to cancel"
-    char=`get_char`
+    #char=`get_char`
     #Current folder
     cur_dir=`pwd`
     cd $cur_dir
