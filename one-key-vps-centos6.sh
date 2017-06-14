@@ -1,3 +1,5 @@
+#!/bin/sh
+
 #####---shadowsocks---#####;
 yum install epel-release -y;yum update -y;yum install python-setuptools -y;easy_install pip;pip install shadowsocks;echo 'alias sslog="tail -f /var/log/shadowsocks.log"' >> /etc/bashrc;echo -e '/usr/bin/ssserver -s ::0 -p 443 -k feizong -m rc4-md5 --user nobody --workers 2 -d start' >> /etc/rc.local;
 
