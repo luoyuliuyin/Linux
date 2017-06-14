@@ -203,7 +203,7 @@ function pre_install(){
     fi
     echo ""
     echo "Press any key to start...or Press Ctrl+C to cancel"
-    char=`get_char`
+    #char=`get_char`
     #Current folder
     cur_dir=`pwd`
     cd $cur_dir
@@ -571,7 +571,10 @@ function success_info(){
     fi
     echo -e "#"
     echo -e "#############################################################"
-    echo -e ""
+    echo -e "ipsec start"
+    echo -e "ipsec stop"
+    echo -e "ipsec restart"
+    echo -e "ipsec status"
 }
 
 # Initialization step
