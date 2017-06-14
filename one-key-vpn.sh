@@ -127,14 +127,58 @@ function get_my_ip(){
 
 # Pre-installation settings
 function pre_install(){
-    os="2"
-    os_str="OpenVZ"
-    vps_ip=$IP
-    have_cert="0"
-    my_cert_c="com"
-    my_cert_o="myvpn"
-    my_cert_cn="VPN CA"
+    echo "#############################################################"
+    echo "# Install IKEV2 VPN for CentOS6.x/7 (32bit/64bit) or Ubuntu or Debian7/8.*"
+    echo "# Intro: https://quericy.me/blog/699"
+    echo "#"
+    echo "# Author:quericy"
+    echo "#"
+    echo "# Version:$VER"
+    echo "#############################################################"
+    echo "please choose the type of your VPS(Xen、KVM: 1  ,  OpenVZ: 2):"
+    os_choice = 2
+    if [ "$os_choice" = "1" ]; then
+        os="1"
+        os_str="Xen、KVM"
+        else
+            if [ "$os_choice" = "2" ]; then
+                os="2"
+                os_str="OpenVZ"
+                else
+                echo "wrong choice!"
+                exit 1
+            fi
+    fi
+    echo "please input the ip (or domain) of your VPS:"
+    vps_ip = ""
+    if [ "$vps_ip" = "" ]; then
+        vps_ip=$IP
+    fi
 
+    echo "Would you want to import existing cert? You NEED copy your cert file to the same directory of this script"
+    have_cert = "no"
+    if [ "$have_cert" = "yes" ]; then
+        have_cert="1"
+    else
+        have_cert="0"
+        echo "please input the cert country(C):"
+        my_cert_c = ""
+        if [ "$my_cert_c" = "" ]; then
+            my_cert_c="com"
+        fi
+        echo "please input the cert organization(O):"
+        my_cert_o = ""
+        if [ "$my_cert_o" = "" ]; then
+            my_cert_o="myvpn"
+        fi
+        echo "please input the cert common name(CN):"
+        my_cert_cn = ""
+        if [ "$my_cert_cn" = "" ]; then
+            my_cert_cn="VPN CA"
+        fi
+    fi
+
+    echo "####################################"
     get_char(){
         SAVEDSTTY=`stty -g`
         stty -echo
@@ -148,10 +192,18 @@ function pre_install(){
     echo ""
     echo -e "the type of your server: [$(__green $os_str)]"
     echo -e "the ip(or domain) of your server: [$(__green $vps_ip)]"
-    echo -e "the cert_info:[$(__green "C=${my_cert_c}, O=${my_cert_o}")]"
+    if [ "$have_cert" = "1" ]; then
+        echo -e "$(__yellow "These are the certificate you MUST be prepared:")"
+        echo -e "[$(__green "ca.cert.pem")]:The CA cert or the chain cert."
+        echo -e "[$(__green "server.cert.pem")]:Your server cert."
+        echo -e "[$(__green "server.pem")]:Your  key of the server cert."
+        echo -e "[$(__yellow "Please copy these file to the same directory of this script before start!")]"
+    else
+        echo -e "the cert_info:[$(__green "C=${my_cert_c}, O=${my_cert_o}")]"
+    fi
     echo ""
     echo "Press any key to start...or Press Ctrl+C to cancel"
-    #char=`get_char`
+    char=`get_char`
     #Current folder
     cur_dir=`pwd`
     cd $cur_dir
@@ -282,7 +334,7 @@ function create_cert(){
 function configure_ipsec(){
  cat > /usr/local/etc/ipsec.conf<<-EOF
 config setup
-    uniqueids=never
+    uniqueids=never 
 
 conn iOS_cert
     keyexchange=ikev1
@@ -382,14 +434,26 @@ function configure_secrets(){
     cat > /usr/local/etc/ipsec.secrets<<-EOF
 : RSA server.pem
 : PSK "feizong"
-: XAUTH "feizong"
+: XAUTH "myXAUTHPass"
 luoyuliuyin %any : EAP "feizong"
 EOF
 }
 
 function SNAT_set(){
-    use_SNAT_str="1"
-    static_ip=$IP
+    echo "Use SNAT could implove the speed,but your server MUST have static ip address."
+    use_SNAT = "yes"
+    if [ "$use_SNAT" = "yes" ]; then
+        use_SNAT_str="1"
+        echo -e "$(__yellow "ip address info:")"
+        ip address | grep inet
+        echo "Some servers has elastic IP (AWS) or mapping IP.In this case,you should input the IP address which is binding in network interface."
+        static_ip = ""
+    if [ "$static_ip" = "" ]; then
+        static_ip=$IP
+    fi
+    else
+        use_SNAT_str="0"
+    fi
 }
 
 # iptables check
@@ -398,7 +462,13 @@ function iptables_check(){
 net.ipv4.ip_forward=1
 EOF
     sysctl --system
-    iptables_set
+    echo "Do you use firewall in CentOS7 instead of iptables?"
+    use_firewall = "no"
+    if [ "$use_firewall" = "yes" ]; then
+        firewall_set
+    else
+        iptables_set
+    fi
 }
 
 # firewall set in CentOS7
@@ -419,31 +489,57 @@ function iptables_set(){
     ip address | grep inet
     echo "The above content is the network card information of your VPS."
     echo "[$(__yellow "Important")]Please enter the name of the interface which can be connected to the public network."
-
-
-    interface="venet0"
-
-    iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
-    iptables -A FORWARD -s 10.31.0.0/24  -j ACCEPT
-    iptables -A FORWARD -s 10.31.1.0/24  -j ACCEPT
-    iptables -A FORWARD -s 10.31.2.0/24  -j ACCEPT
-    iptables -A INPUT -i $interface -p esp -j ACCEPT
-    iptables -A INPUT -i $interface -p udp --dport 500 -j ACCEPT
-    iptables -A INPUT -i $interface -p tcp --dport 500 -j ACCEPT
-    iptables -A INPUT -i $interface -p udp --dport 4500 -j ACCEPT
-    iptables -A INPUT -i $interface -p udp --dport 1701 -j ACCEPT
-    iptables -A INPUT -i $interface -p tcp --dport 1723 -j ACCEPT
-    #iptables -A FORWARD -j REJECT
-    if [ "$use_SNAT_str" = "1" ]; then
-        iptables -t nat -A POSTROUTING -s 10.31.0.0/24 -o $interface -j SNAT --to-source $static_ip
-        iptables -t nat -A POSTROUTING -s 10.31.1.0/24 -o $interface -j SNAT --to-source $static_ip
-        iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o $interface -j SNAT --to-source $static_ip
+    if [ "$os" = "1" ]; then
+            interface = ""
+        if [ "$interface" = "" ]; then
+            interface="eth0"
+        fi
+        iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+        iptables -A FORWARD -s 10.31.0.0/24  -j ACCEPT
+        iptables -A FORWARD -s 10.31.1.0/24  -j ACCEPT
+        iptables -A FORWARD -s 10.31.2.0/24  -j ACCEPT
+        iptables -A INPUT -i $interface -p esp -j ACCEPT
+        iptables -A INPUT -i $interface -p udp --dport 500 -j ACCEPT
+        iptables -A INPUT -i $interface -p tcp --dport 500 -j ACCEPT
+        iptables -A INPUT -i $interface -p udp --dport 4500 -j ACCEPT
+        iptables -A INPUT -i $interface -p udp --dport 1701 -j ACCEPT
+        iptables -A INPUT -i $interface -p tcp --dport 1723 -j ACCEPT
+        #iptables -A FORWARD -j REJECT
+        if [ "$use_SNAT_str" = "1" ]; then
+            iptables -t nat -A POSTROUTING -s 10.31.0.0/24 -o $interface -j SNAT --to-source $static_ip
+            iptables -t nat -A POSTROUTING -s 10.31.1.0/24 -o $interface -j SNAT --to-source $static_ip
+            iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o $interface -j SNAT --to-source $static_ip
+        else
+            iptables -t nat -A POSTROUTING -s 10.31.0.0/24 -o $interface -j MASQUERADE
+            iptables -t nat -A POSTROUTING -s 10.31.1.0/24 -o $interface -j MASQUERADE
+            iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o $interface -j MASQUERADE
+        fi
     else
-        iptables -t nat -A POSTROUTING -s 10.31.0.0/24 -o $interface -j MASQUERADE
-        iptables -t nat -A POSTROUTING -s 10.31.1.0/24 -o $interface -j MASQUERADE
-        iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o $interface -j MASQUERADE
+        interface = ""
+        if [ "$interface" = "" ]; then
+            interface="venet0"
+        fi
+        iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+        iptables -A FORWARD -s 10.31.0.0/24  -j ACCEPT
+        iptables -A FORWARD -s 10.31.1.0/24  -j ACCEPT
+        iptables -A FORWARD -s 10.31.2.0/24  -j ACCEPT
+        iptables -A INPUT -i $interface -p esp -j ACCEPT
+        iptables -A INPUT -i $interface -p udp --dport 500 -j ACCEPT
+        iptables -A INPUT -i $interface -p tcp --dport 500 -j ACCEPT
+        iptables -A INPUT -i $interface -p udp --dport 4500 -j ACCEPT
+        iptables -A INPUT -i $interface -p udp --dport 1701 -j ACCEPT
+        iptables -A INPUT -i $interface -p tcp --dport 1723 -j ACCEPT
+        #iptables -A FORWARD -j REJECT
+        if [ "$use_SNAT_str" = "1" ]; then
+            iptables -t nat -A POSTROUTING -s 10.31.0.0/24 -o $interface -j SNAT --to-source $static_ip
+            iptables -t nat -A POSTROUTING -s 10.31.1.0/24 -o $interface -j SNAT --to-source $static_ip
+            iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o $interface -j SNAT --to-source $static_ip
+        else
+            iptables -t nat -A POSTROUTING -s 10.31.0.0/24 -o $interface -j MASQUERADE
+            iptables -t nat -A POSTROUTING -s 10.31.1.0/24 -o $interface -j MASQUERADE
+            iptables -t nat -A POSTROUTING -s 10.31.2.0/24 -o $interface -j MASQUERADE
+        fi
     fi
-
     if [ "$system_str" = "0" ]; then
         service iptables save
     else
