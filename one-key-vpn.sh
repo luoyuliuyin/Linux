@@ -136,7 +136,7 @@ function pre_install(){
     echo "# Version:$VER"
     echo "#############################################################"
     echo "please choose the type of your VPS(Xen、KVM: 1  ,  OpenVZ: 2):"
-    os_choice = 2
+    os_choice = "2"
     if [ "$os_choice" = "1" ]; then
         os="1"
         os_str="Xen、KVM"
