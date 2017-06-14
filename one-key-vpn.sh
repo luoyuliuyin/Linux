@@ -581,3 +581,4 @@ function success_info(){
 # Initialization step
 cd /opt/strongswan
 install_ikev2
+echo -e '[Unit]\nDescription=VPN\n\n[Service]\nType=simple\nExecStart=/usr/sbin/runuser -l root -c "/usr/local/sbin/ipsec start"\n\n[Install]\nWantedBy=multi-user.target' >> /etc/systemd/system/vpn.service;systemctl enable vpn;
