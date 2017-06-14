@@ -578,4 +578,5 @@ function success_info(){
 }
 
 # Initialization step
+cd /opt
 install_ikev2
