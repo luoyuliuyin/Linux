@@ -579,5 +579,5 @@ function success_info(){
 }
 
 # Initialization step
-cd /opt
+cd /opt/strongswan
 install_ikev2
