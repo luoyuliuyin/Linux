@@ -571,6 +571,8 @@ function success_info(){
     fi
     echo -e '[Unit]\nDescription=VPN\n\n[Service]\nType=simple\nExecStart=/usr/sbin/runuser -l root -c "/usr/local/sbin/ipsec start"\n\n[Install]\nWantedBy=multi-user.target' >> /etc/systemd/system/vpn.service;
     systemctl enable vpn;
+    cd;
+    rm -f one-key-vpn.sh;
     echo -e "#"
     echo -e "#############################################################"
     echo -e "ipsec start"
