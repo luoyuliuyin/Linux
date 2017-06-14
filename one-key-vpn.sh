@@ -575,6 +575,7 @@ function success_info(){
     echo -e "ipsec stop"
     echo -e "ipsec restart"
     echo -e "ipsec status"
+    echo -e "make uninstall"
 }
 
 # Initialization step
