@@ -10,4 +10,4 @@ yum install libnet libnet-devel libpcap-devel gcc -y;wget https://storage.google
 wget -P /usr/share/fonts/yahei https://raw.githubusercontent.com/yakumioto/YaHei-Consolas-Hybrid-1.12/master/YaHei%20Consolas%20Hybrid%201.12.ttf;
 
 #####---vnc---#####;
-yum install gnome-classic-session gnome-terminal gnome-system-monitor tigervnc-server firefox -y;sed -i 's/1024x768/1536x960/g' /usr/bin/vncserver;echo -e '/usr/sbin/runuser -l root -c "/usr/bin/vncserver %i"' >> /etc/rc.local;vncpasswd;
+yum install gnome-desktop gnome-session gnome-terminal gnome-system-monitor chkconfig tigervnc-server -y;sed -i 's/1024x768/2561x1600/g' /usr/bin/vncserver;echo -e 'gnome-session &\nvncconfig -iconic &' >> /root/.vnc/xstartup;chkconfig vncserver on --level 345;vncpasswd;
