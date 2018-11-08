@@ -12,4 +12,4 @@ wget -P /usr/share/fonts/yahei https://raw.githubusercontent.com/yakumioto/YaHei
 #####---vnc---#####;
 yum install gnome-desktop gnome-session gnome-panel gnome-terminal gnome-system-monitor chkconfig tigervnc-server -y;sed -i 's/1024x768/2561x1600/g' /usr/bin/vncserver;echo -e 'gnome-session &\nvncconfig -iconic &' >> /root/.vnc/xstartup;chkconfig vncserver on --level 345;vncpasswd;
 
-cd;rm -f one-key-vps-centos6.sh;
+cd;rm -f one-key-vps-centos6.sh;reboot;
