@@ -36,7 +36,7 @@ systemctl enable spring-boot-tools;
 #wget -P /usr/share/fonts/yahei https://raw.githubusercontent.com/yakumioto/YaHei-Consolas-Hybrid-1.12/master/YaHei%20Consolas%20Hybrid%201.12.ttf;
 
 #####---vnc---#####;
-#yum install gnome-classic-session gnome-terminal gnome-system-monitor tigervnc-server gedit expect firefox -y;sed -i 's/1024x768/1536x960/g' /usr/bin/vncserver;echo -e '[Unit]\nDescription=VNC\n\n[Service]\nType=simple\nExecStart=/usr/sbin/runuser -l root -c "/usr/bin/vncserver %i"\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/vncserver@:1.service;systemctl enable vncserver@:1.service;vncpasswd;
+#yum install gnome-classic-session gnome-terminal gnome-system-monitor tigervnc-server gedit expect firefox -y;sed -i 's/1024x768/1536x960/g' /usr/bin/vncserver;echo -e '[Unit]\nDescription=VNC\n\n[Service]\nType=simple\nExecStart=/usr/sbin/runuser -l root -c "/usr/bin/vncserver %i"\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/vncserver.service;systemctl enable vncserver.service;vncpasswd;
 
 cd;
 rm -f *;
