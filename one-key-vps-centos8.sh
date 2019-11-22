@@ -21,7 +21,7 @@ cd;
 wget https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.zip;
 unzip apache-maven-3.6.2-bin.zip;
 mv apache-maven-3.6.2 /opt;
-yum install jdk1.8 -y;
+yum install java-1.8.0-openjdk.x86_64 -y;
 echo -e '# .bash_profile\n\n# Get the aliases and functions\nif [ -f ~/.bashrc ]; then\n        . ~/.bashrc\nfi\n\n# User specific environment and startup programs\nexport LC_ALL=en_US.UTF-8\nexport JAVA_HOME=/usr/java/default/\nexport MAVEN_HOME=/opt/apache-maven-3.6.2/\nPATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME/bin\n\nexport PATH' > /root/.bash_profile;
 source /root/.bash_profile;
 cd /opt;
