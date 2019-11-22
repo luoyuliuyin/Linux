@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#####---shadowsocks---#####;
+#####---shadowsocksr---#####;
 yum update -y;
 yum install vim wget unzip git python36 -y;
 wget https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/l/libsodium-1.0.18-1.el7.x86_64.rpm;
