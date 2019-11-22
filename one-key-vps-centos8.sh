@@ -29,7 +29,8 @@ cd /opt;
 git clone https://github.com/luoyuliuyin/spring-boot-tools.git;
 cd spring-boot-tools;
 mvn clean install;
-echo -e '[Unit]\n	Description=spring-boot-tools\n\n[Service]\n	Type=forking\n	WorkingDirectory=/root\n	Restart=always\n	RestartSec=1\n	ExecStart=/usr/bin/java -jar /opt/spring-boot-tools/target/spring-boot-tools.jar\n\n[Install]\n	WantedBy=multi-user.target' > /etc/systemd/system/spring-boot-tools.service;systemctl enable spring-boot-tools;
+echo -e '[Unit]\n	Description=spring-boot-tools\n\n[Service]\n	Type=forking\n	WorkingDirectory=/root\n	Restart=always\n	RestartSec=1\n	ExecStart=/usr/bin/java -jar /opt/spring-boot-tools/target/spring-boot-tools.jar\n\n[Install]\n	WantedBy=multi-user.target' > /etc/systemd/system/spring-boot-tools.service;
+systemctl enable spring-boot-tools;
 
 #####—--ttf---#####;
 #wget -P /usr/share/fonts/yahei https://raw.githubusercontent.com/yakumioto/YaHei-Consolas-Hybrid-1.12/master/YaHei%20Consolas%20Hybrid%201.12.ttf;
