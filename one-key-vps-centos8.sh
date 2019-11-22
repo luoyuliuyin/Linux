@@ -16,9 +16,6 @@ systemctl enable shadowsocksr;
 #####---net_speeder---#####;
 #yum install libnet libnet-devel libpcap-devel gcc -y;wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/net-speeder/net_speeder-v0.1.tar.gz -O -|tar -xzv -C /opt;cd /opt/net_speeder;sh build.sh -DCOOKED;cd;echo -e '[Unit]\nDescription=net_speeder\nAfter=network.service\n\n[Service]\nType=simple\nExecStart=/opt/net_speeder/net_speeder eth0 "ip"\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/net_speeder.service;systemctl enable net_speeder;
 
-#####—--SimpleHTTPServer---#####;
-#echo -e '[Unit]\nDescription=SimpleHTTPServer\n\n[Service]\nType=forking\nWorkingDirectory=/root\nRestart=always\nRestartSec=1\nExecStart=/usr/bin/python -m SimpleHTTPServer 80\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/SimpleHTTPServer.service;systemctl enable SimpleHTTPServer;
-
 #####—--spring-boot-tools---#####;
 cd;
 wget https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.zip;
