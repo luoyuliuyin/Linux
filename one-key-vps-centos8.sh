@@ -21,7 +21,7 @@ systemctl enable shadowsocksr;
 
 #####—--spring-boot-tools---#####;
 cd;
-wget https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.zip;
+wget https://archive.apache.org/dist/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.zip;
 unzip apache-maven-3.6.2-bin.zip;
 mv apache-maven-3.6.2 /opt;
 wget https://github.com/frekele/oracle-java/releases/download/8u212-b10/jdk-8u212-linux-x64.rpm;
