@@ -1,5 +1,10 @@
 #!/bin/sh
 
+#####---V2ray---#####;
+bash <(curl -L -s https://github.com/luoyuliuyin/Linux/blob/master/one-key-vps-centos8.sh);
+echo -e '{\n  "log": {\n    "access": "/var/log/v2ray/access.log",\n    "error": "/var/log/v2ray/error.log",\n    "loglevel": "warning"\n  },\n  "inbounds": [\n    {\n      "port": 43999,\n      "protocol": "vmess",\n      "settings": {\n        "clients": [\n          {\n            "id": "5aaff639-6a7d-4461-b6b5-9d7a42958a65",\n            "level": 1,\n            "alterId": 64\n          }\n        ]\n      }\n    }\n  ],\n  "outbounds": [\n    {\n      "protocol": "freedom",\n      "settings": {}\n    },\n    {\n      "protocol": "blackhole",\n      "settings": {},\n      "tag": "blocked"\n    }\n  ],\n  "routing": {\n    "rules": [\n      {\n        "type": "field",\n        "ip": [\n          "geoip:private"\n        ],\n        "outboundTag": "blocked"\n      }\n    ]\n  }\n}' > /etc/v2ray/config.json;
+echo 'alias log="tail -f /var/log/v2ray/access.log"' >> /etc/bashrc;
+
 #####---shadowsocksr---#####;
 yum update -y;
 yum install vim wget unzip git python36 -y;
@@ -11,11 +16,6 @@ cd /opt/shadowsocksr;
 bash initcfg.sh;
 echo -e '[Unit]\nDescription=Shadowsocksr\n\n[Service]\nType=forking\nExecStart=/usr/bin/python3 /opt/shadowsocksr/shadowsocks/server.py -p 4399 -k pengfeixiong -m chacha20 -O auth_aes128_md5 -o tls1.2_ticket_auth --workers 2 -d start\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/shadowsocksr.service;
 systemctl enable shadowsocksr;
-
-#####---V2ray---#####;
-bash <(curl -L -s https://github.com/luoyuliuyin/Linux/blob/master/one-key-vps-centos8.sh);
-echo -e '{\n  "log": {\n    "access": "/var/log/v2ray/access.log",\n    "error": "/var/log/v2ray/error.log",\n    "loglevel": "warning"\n  },\n  "inbounds": [\n    {\n      "port": 43999,\n      "protocol": "vmess",\n      "settings": {\n        "clients": [\n          {\n            "id": "5aaff639-6a7d-4461-b6b5-9d7a42958a65",\n            "level": 1,\n            "alterId": 64\n          }\n        ]\n      }\n    }\n  ],\n  "outbounds": [\n    {\n      "protocol": "freedom",\n      "settings": {}\n    },\n    {\n      "protocol": "blackhole",\n      "settings": {},\n      "tag": "blocked"\n    }\n  ],\n  "routing": {\n    "rules": [\n      {\n        "type": "field",\n        "ip": [\n          "geoip:private"\n        ],\n        "outboundTag": "blocked"\n      }\n    ]\n  }\n}' > /etc/v2ray/config.json;
-echo 'alias log="tail -f /var/log/v2ray/access.log"' >> /etc/bashrc;
 
 #####---net_speeder---#####;
 #yum install libnet libnet-devel libpcap-devel gcc -y;wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/net-speeder/net_speeder-v0.1.tar.gz -O -|tar -xzv -C /opt;cd /opt/net_speeder;sh build.sh -DCOOKED;cd;echo -e '[Unit]\nDescription=net_speeder\nAfter=network.service\n\n[Service]\nType=simple\nExecStart=/opt/net_speeder/net_speeder eth0 "ip"\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/net_speeder.service;systemctl enable net_speeder;
