@@ -46,6 +46,5 @@ echo '0 2 * * * root yum upgrade -y' >> /etc/crontab;
 echo '0 3 * * * root bash <(curl -L -s https://install.direct/go.sh)' >> /etc/crontab;
 echo '0 4 * * * root reboot' >> /etc/crontab;
 
-cd;
-rm -f *;
+rm -f /root/*;
 reboot;
