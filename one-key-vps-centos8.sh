@@ -2,7 +2,7 @@
 
 #####---pre---#####;
 yum update -y;
-yum install vim wget unzip git python36 -y;
+yum install vim wget unzip git -y;
 
 #####---V2ray---#####;
 bash <(curl -L -s https://install.direct/go.sh);
@@ -10,8 +10,7 @@ echo -e '{\n  "log": {\n    "access": "/var/log/v2ray/access.log",\n    "error":
 echo 'alias log="tail -f /var/log/v2ray/access.log"' >> /etc/bashrc;
 
 #####---shadowsocksr---#####;
-#yum install epel-release -y;
-#yum install libsodium -y;
+#yum install python36 epel-release libsodium -y;
 #cd /opt;
 #git clone -b manyuser https://github.com/shadowsocksr-backup/shadowsocksr.git;
 #cd /opt/shadowsocksr;
