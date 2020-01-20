@@ -10,14 +10,14 @@ echo -e '{\n  "log": {\n    "access": "/var/log/v2ray/access.log",\n    "error":
 echo 'alias log="tail -f /var/log/v2ray/access.log"' >> /etc/bashrc;
 
 #####---shadowsocksr---#####;
-yum install epel-release -y;
-yum install libsodium -y;
-cd /opt;
-git clone -b manyuser https://github.com/shadowsocksr-backup/shadowsocksr.git;
-cd /opt/shadowsocksr;
-bash initcfg.sh;
-echo -e '[Unit]\nDescription=Shadowsocksr\n\n[Service]\nType=forking\nExecStart=/usr/bin/python3 /opt/shadowsocksr/shadowsocks/server.py -p 4399 -k pengfeixiong -m chacha20 -O auth_aes128_md5 -o tls1.2_ticket_auth --workers 2 -d start\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/shadowsocksr.service;
-systemctl enable shadowsocksr;
+#yum install epel-release -y;
+#yum install libsodium -y;
+#cd /opt;
+#git clone -b manyuser https://github.com/shadowsocksr-backup/shadowsocksr.git;
+#cd /opt/shadowsocksr;
+#bash initcfg.sh;
+#echo -e '[Unit]\nDescription=Shadowsocksr\n\n[Service]\nType=forking\nExecStart=/usr/bin/python3 /opt/shadowsocksr/shadowsocks/server.py -p 4399 -k pengfeixiong -m chacha20 -O auth_aes128_md5 -o tls1.2_ticket_auth --workers 2 -d start\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/shadowsocksr.service;
+#systemctl enable shadowsocksr;
 
 #####—--spring-boot-tools---#####;
 cd;
