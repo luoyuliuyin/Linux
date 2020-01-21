@@ -30,7 +30,7 @@ cd /opt;
 git clone https://github.com/luoyuliuyin/spring-boot-tools.git;
 cd /opt/spring-boot-tools;
 mvn clean install;
-echo -e '[Unit]\n	Description=spring-boot-tools\n\n[Service]\n	Type=forking\n	WorkingDirectory=/root\n	Restart=on-failure\n	RestartSec=1\n	ExecStart=/usr/bin/java -jar /opt/spring-boot-tools/target/spring-boot-tools.jar\n\n[Install]\n	WantedBy=multi-user.target' > /etc/systemd/system/spring-boot-tools.service;
+echo -e '[Unit]\n	Description=spring-boot-tools\n\n[Service]\n	Type=forking\n	WorkingDirectory=/root\n	Restart=on-failure\n	ExecStart=/usr/bin/java -jar /opt/spring-boot-tools/target/spring-boot-tools.jar\n\n[Install]\n	WantedBy=multi-user.target' > /etc/systemd/system/spring-boot-tools.service;
 systemctl enable spring-boot-tools;
 
 #####—--ttf---#####;
