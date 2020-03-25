@@ -43,7 +43,7 @@ systemctl enable spring-boot-tools;
 timedatectl set-timezone Asia/Shanghai;
 echo '0 2 * * * root yum update -y' >> /etc/crontab;
 echo '0 3 * * * root bash <(curl -L -s https://install.direct/go.sh)' >> /etc/crontab;
-echo '0 4 * * * root reboot' >> /etc/crontab;
+echo '4 4 * * * root reboot' >> /etc/crontab;
 
 rm -f /root/*;
 reboot;
