@@ -9,15 +9,6 @@ bash <(curl -L -s https://install.direct/go.sh);
 echo -e '{\n  "log": {\n    "access": "/var/log/v2ray/access.log",\n    "error": "/var/log/v2ray/error.log",\n    "loglevel": "warning"\n  },\n  "inbounds": [\n    {\n      "port": 43999,\n      "protocol": "vmess",\n      "settings": {\n        "clients": [\n          {\n            "id": "5aaff639-6a7d-4461-b6b5-9d7a42958a65",\n            "level": 1,\n            "alterId": 64\n          }\n        ]\n      }\n    }\n  ],\n  "outbounds": [\n    {\n      "protocol": "freedom",\n      "settings": {}\n    }\n  ]\n}' > /etc/v2ray/config.json;
 echo 'alias log="tail -f /var/log/v2ray/access.log"' >> /etc/bashrc;
 
-#####---shadowsocksr---#####;
-#yum install python36 epel-release libsodium -y;
-#cd /opt;
-#git clone -b manyuser https://github.com/shadowsocksr-backup/shadowsocksr.git;
-#cd /opt/shadowsocksr;
-#bash initcfg.sh;
-#echo -e '[Unit]\nDescription=Shadowsocksr\n\n[Service]\nType=forking\nExecStart=/usr/bin/python3 /opt/shadowsocksr/shadowsocks/server.py -p 4399 -k pengfeixiong -m chacha20 -O auth_aes128_md5 -o tls1.2_ticket_auth --workers 2 -d start\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/shadowsocksr.service;
-#systemctl enable shadowsocksr;
-
 #####—--spring-boot-tools---#####;
 cd;
 wget https://archive.apache.org/dist/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.zip;
@@ -33,9 +24,6 @@ mvn clean install;
 echo -e '[Unit]\n	Description=spring-boot-tools\n\n[Service]\n	Type=simple\n	WorkingDirectory=/root\n	Restart=on-failure\n	ExecStart=/usr/bin/java -jar /opt/spring-boot-tools/target/spring-boot-tools.jar\n\n[Install]\n	WantedBy=multi-user.target' > /etc/systemd/system/spring-boot-tools.service;
 systemctl enable spring-boot-tools;
 
-#####—--ttf---#####;
-#wget -P /usr/share/fonts/yahei https://raw.githubusercontent.com/yakumioto/YaHei-Consolas-Hybrid-1.12/master/YaHei%20Consolas%20Hybrid%201.12.ttf;
-
 #####---vnc---#####;
 #yum install gnome-classic-session gnome-terminal gnome-system-monitor tigervnc-server gedit firefox -y;sed -i 's/1024x768/1536x960/g' /usr/bin/vncserver;echo -e '[Unit]\nDescription=VNC\n\n[Service]\nType=simple\nExecStart=/usr/sbin/runuser -l root -c "/usr/bin/vncserver"\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/vncserver.service;systemctl enable vncserver.service;vncpasswd;
 
@@ -44,7 +32,7 @@ timedatectl set-timezone Asia/Shanghai;
 echo '1 1 * * * root yum update -y' >> /etc/crontab;
 echo '2 2 * * * root bash <(curl -L -s https://install.direct/go.sh)' >> /etc/crontab;
 echo '3 3 * * * root reboot' >> /etc/crontab;
-echo '4 4 * * * root /root/virt-sysprep-firstboot.log' >> /etc/crontab;
+echo '4 4 * * * root rm -rf /root/virt-sysprep-firstboot.log' >> /etc/crontab;
 
 rm -f /root/*;
 reboot;
