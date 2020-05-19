@@ -27,7 +27,7 @@ systemctl enable spring-boot-tools;
 #####---vnc---#####;
 #yum install gnome-classic-session gnome-terminal gnome-system-monitor tigervnc-server gedit firefox -y;sed -i 's/1024x768/1536x960/g' /usr/bin/vncserver;echo -e '[Unit]\nDescription=VNC\n\n[Service]\nType=simple\nExecStart=/usr/sbin/runuser -l root -c "/usr/bin/vncserver"\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/vncserver.service;systemctl enable vncserver.service;vncpasswd;
 
-#####---reboot---#####;
+#####---crontab---#####;
 timedatectl set-timezone Asia/Shanghai;
 echo '1 1 * * * root yum update -y' >> /etc/crontab;
 echo '2 2 * * * root bash <(curl -L -s https://install.direct/go.sh)' >> /etc/crontab;
