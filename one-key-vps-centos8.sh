@@ -31,7 +31,7 @@ systemctl enable spring-boot-tools;
 timedatectl set-timezone Asia/Shanghai;
 echo '0 0 * * * root yum clean all' >> /etc/crontab;
 echo '1 1 * * * root yum update -y' >> /etc/crontab;
-echo '2 2 * * * root bash <(curl -L -s https://install.direct/go.sh)' >> /etc/crontab;
+echo '2 2 * * * root bash <(curl -L -s https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)' >> /etc/crontab;
 echo '3 3 * * * root reboot' >> /etc/crontab;
 echo '4 4 * * * root rm -rf /root/virt-sysprep-firstboot.log' >> /etc/crontab;
 
