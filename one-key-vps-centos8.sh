@@ -8,6 +8,7 @@ yum install vim wget unzip git -y;
 bash <(curl -L -s https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh);
 echo -e '{\n  "log": {\n    "access": "/var/log/v2ray/access.log",\n    "error": "/var/log/v2ray/error.log",\n    "loglevel": "warning"\n  },\n  "inbounds": [\n    {\n      "port": 608,\n      "protocol": "vmess",\n      "settings": {\n        "clients": [\n          {\n            "id": "5aaff639-6a7d-4461-b6b5-9d7a42958a65",\n            "level": 1,\n            "alterId": 64\n          }\n        ]\n      }\n    }\n  ],\n  "outbounds": [\n    {\n      "protocol": "freedom",\n      "settings": {}\n    }\n  ]\n}' > /usr/local/etc/v2ray/config.json;
 echo 'alias log="tail -f /var/log/v2ray/access.log"' >> /etc/bashrc;
+systemctl enable v2ray;
 
 #####—--spring-boot-tools---#####;
 cd;
